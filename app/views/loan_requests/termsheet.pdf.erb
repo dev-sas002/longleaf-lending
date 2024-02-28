@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title><%= "Loan Request Term Sheet" %></title>
+    <%= wicked_pdf_stylesheet_link_tag "tailwind" %>
+  </head>
+  <body class="p-8 bg-gray-50 text-gray-800">
+
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-teal-600">Loan Request Term Sheet</h1>
+      <p class="text-lg text-teal-400">Longleaf Lending</p>
+    </div>
+
+    <div class="mb-8 bg-white p-6 rounded-lg shadow-md border border-teal-200">
+      <h2 class="text-2xl font-semibold border-b-2 border-teal-600 pb-2 text-teal-700">Loan Request Details</h2>
+      <p class="text-lg mt-4"><strong>Address:</strong> <%= loan_request.address %></p>
+      <p class="text-lg"><strong>Loan Term (months):</strong> <%= loan_request.loan_term %></p>
+      <p class="text-lg"><strong>Purchase Price:</strong> $<%= number_to_currency(loan_request.purchase_price, unit: '') %></p>
+      <p class="text-lg"><strong>Repair Budget:</strong> $<%= number_to_currency(loan_request.repair_budget, unit: '') %></p>
+      <p class="text-lg"><strong>After Repair Value (ARV):</strong> $<%= number_to_currency(loan_request.arv, unit: '') %></p>
+    </div>
+
+    <div class="mb-8 bg-white p-6 rounded-lg shadow-md border border-teal-200">
+      <h2 class="text-2xl font-semibold border-b-2 border-teal-600 pb-2 text-teal-700">Applicant Information</h2>
+      <p class="text-lg mt-4"><strong>Name:</strong> <%= loan_request.first_name + " " + loan_request.last_name %></p>
+      <p class="text-lg"><strong>Email:</strong> <%= loan_request.email %></p>
+      <p class="text-lg"><strong>Phone:</strong> <%= loan_request.phone %></p>
+    </div>
+
+    <div class="mb-8 bg-white p-6 rounded-lg shadow-md border border-teal-200">
+      <h2 class="text-2xl font-semibold border-b-2 border-teal-600 pb-2 text-teal-700">Calculated Loan Details</h2>
+      <p class="text-lg mt-4"><strong>Max Fundable Amount:</strong> $<%= number_to_currency(loan_request.calculate_max_fundable_amount, unit: '') %></p>
+      <p class="text-lg"><strong>Total Interest Expense:</strong> $<%= number_to_currency(loan_request.calculate_interest_expense(loan_request.calculate_max_fundable_amount), unit: '') %></p>
+      <p class="text-lg"><strong>Estimated Profit:</strong> $<%= number_to_currency(loan_request.calculate_profit, unit: '') %></p>
+    </div>
+
+    <div class="mt-12 pt-6 border-t-2 border-teal-600 bg-white p-6 rounded-lg shadow-md border border-teal-200">
+      <h2 class="text-2xl font-semibold pb-2 text-teal-700">Terms and Conditions</h2>
+      <p class="text-sm mt-4 text-gray-700">1. The loan amount can only fund up to 90% of the purchase price.</p>
+      <p class="text-sm text-gray-700">2. The loan amount cannot exceed 70% of the after repair value (ARV).</p>
+      <p class="text-sm text-gray-700">3. Interest expense is calculated using a 13% annual rate, compounded monthly for the loan term specified.</p>
+      <p class="text-sm text-gray-700">4. The estimated profit is calculated as ARV minus total loan value minus total interest expense.</p>
+      <p class="text-sm text-gray-700">5. All values are estimates and subject to final approval.</p>
+    </div>
+  </body>
+</html>
