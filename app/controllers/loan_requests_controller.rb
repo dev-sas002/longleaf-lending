@@ -18,7 +18,10 @@ class LoanRequestsController < ApplicationController
       respond_to do |format|
         flash[:alert] = 'Loan Request could not be saved.'
         format.html { redirect_to root_path }
-        format.json { render json: { status: '422', errors: @loan_request.errors.full_messages } }
+        format.json do
+          render json: { errors: @loan_request.errors.full_messages },
+                 status: :unprocessable_entity
+        end
       end
     end
   end

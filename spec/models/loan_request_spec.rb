@@ -78,11 +78,11 @@ RSpec.describe LoanRequest, type: :model do
       subject.purchase_price = 200000
       subject.arv = 300000
       subject.loan_term = 6
-
+      # max_fundable = min(180000, 210000) = 180000; interest = 180000 * (0.13/12) * 6 = 11700
       allow(subject).to receive(:calculate_max_fundable_amount).and_return(180000)
-      allow(subject).to receive(:calculate_interest_expense).with(300000).and_return(2340)
+      allow(subject).to receive(:calculate_interest_expense).with(180000).and_return(11700)
 
-      expect(subject.calculate_profit).to eq(300000)
+      expect(subject.calculate_profit).to eq(108300) # 300000 - 180000 - 11700
     end
   end
 end
