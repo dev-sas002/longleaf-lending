@@ -50,6 +50,15 @@ RSpec.describe LoanRequestsController, type: :controller do
         post :create, params: { loan_request: FactoryBot.attributes_for(:loan_request, email: nil) }
         expect(flash[:alert]).to be_present
       end
+
+      it "responds with JSON unprocessable_entity (422) and error messages" do
+        post :create, format: :json, params: { loan_request: FactoryBot.attributes_for(:loan_request, email: nil) }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to include("application/json")
+        body = JSON.parse(response.body)
+        expect(body).to have_key("errors")
+        expect(body["errors"]).to be_an(Array)
+      end
     end
   end
 end
