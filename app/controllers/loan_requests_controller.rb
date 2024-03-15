@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class LoanRequestsController < ApplicationController
+  rescue_from ActionController::ParameterMissing, with: :handle_parameter_missing
+
   def new
     @loan_request = LoanRequest.new
   end
@@ -31,5 +33,15 @@ class LoanRequestsController < ApplicationController
   def loan_request_params
     params.require(:loan_request).permit(:address, :loan_term, :purchase_price, :repair_budget, :arv, :first_name,
                                          :last_name, :email, :phone)
+  end
+
+  # Return 400 Bad Request when required params are missing (e.g. JSON without loan_request key).
+  def handle_parameter_missing(exception)
+    respond_to do |format|
+      format.html { redirect_to root_path, alert: 'Invalid request.' }
+      format.json do
+        render json: { errors: [exception.message] }, status: :bad_request
+      end
+    end
   end
 end

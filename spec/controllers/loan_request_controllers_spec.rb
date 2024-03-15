@@ -60,5 +60,15 @@ RSpec.describe LoanRequestsController, type: :controller do
         expect(body["errors"]).to be_an(Array)
       end
     end
+
+    context "when loan_request params are missing (ParameterMissing)" do
+      it "responds with JSON bad_request (400) and error message" do
+        post :create, format: :json, params: {}
+        expect(response).to have_http_status(:bad_request)
+        body = JSON.parse(response.body)
+        expect(body).to have_key("errors")
+        expect(body["errors"]).to be_an(Array)
+      end
+    end
   end
 end
